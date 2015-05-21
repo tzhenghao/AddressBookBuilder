@@ -11,6 +11,7 @@
 import pyperclip # For clipboard usage.
 import re # For regular expression usage.
 import sys
+import os # For file streams
 
 # TODO - Handle names.
 
@@ -26,13 +27,26 @@ def emailAddrHandler():
 
 # REQUIRES: The data structures of the contacts to be populated.
 # EFFECTS: Prints out the contacts that are detectable by the program.
-def printContacts():
+#def printContacts():
+
+# REQUIRES: The data structures of the contacts to be populated.
+# EFFECTS: Saves the contacts that are detectable by the program into a file.
+#def saveContacts():
+
+readFromFile = False
 
 if len(sys.argv) < 2:
 	print('Reading from clipboard...')
-else if len(sys.argv) == 2:
-	print('Reading from ' + str(sys.argv) + '...')
+elif len(sys.argv) == 2:
+	print('Reading from ' + str(sys.argv[1]) + '...')
+	readFromFile = True
 else:
 	print('Error: Too many arguments for this program!')
 	sys.exit()
 
+# Handle read from File
+if readFromFile:
+	openedFile = open(sys.argv[1])
+	fileContent = openedFile.readlines()
+else:
+	clipboardContent = pyperclip.paste()
