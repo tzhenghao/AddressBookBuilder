@@ -21,6 +21,7 @@ OUTPUTFILE = 'contacts.txt'
 
 # EFFECTS: Returns the phone numbers if present, None if phone number is absent.
 def phoneNumberHandler(text):
+	print(text)
 	phoneReg = re.compile(r'\d\d\d-\d\d\d-\d\d\d\d')
 	phoneNums = phoneReg.findall(text)
 	return phoneNums
@@ -28,7 +29,13 @@ def phoneNumberHandler(text):
 
 # EFFECTS: Returns the email addresses if present, None if absent.
 def emailAddrHandler(text):
-	emailReg = re.compile(r'\@+(\.com|\.edu)', re.I)
+	print(text)
+	emailReg = re.compile(r'''(
+		[a-zA-Z0-9._%+-]+ # username 
+		@
+		[a-zA-Z0-9.-]+
+		\.[a-zA-Z]{2,4}
+		)''',re.I)
 	emails = emailReg.findall(text)
 	print(str(len(emails)))
 	return emails
@@ -97,5 +104,5 @@ if readFromFile:
 	openedFile.close()
 # Handle clipboard
 else:
-	clipboardContent = pyperclip.paste()
+	clipboardContent = str(pyperclip.paste())
 	phoneAndEmailHelper(clipboardContent)
