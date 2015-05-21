@@ -15,6 +15,10 @@ import os # For file streams
 # TODO - Handle names.
 #def nameHandler(text):
 
+# CONSTANTS
+NUMARGS = 2
+OUTPUTFILE = 'contacts.txt'
+
 # EFFECTS: Returns the phone numbers if present, None if phone number is absent.
 def phoneNumberHandler(text):
 	phoneReg = re.compile(r'\d\d\d-\d\d\d-\d\d\d\d')
@@ -24,9 +28,9 @@ def phoneNumberHandler(text):
 
 # EFFECTS: Returns the email addresses if present, None if absent.
 def emailAddrHandler(text):
-	print('hehehoidnjwaonidwa')
-	emailReg = re.compile(r'@+(\.com|\.edu)')
+	emailReg = re.compile(r'\@+(\.com|\.edu)', re.I)
 	emails = emailReg.findall(text)
+	print(str(len(emails)))
 	return emails
 
 
@@ -35,16 +39,30 @@ def emailAddrHandler(text):
 def printContacts():
 	print('calling printContacts...')
 
+
 # REQUIRES: The data structures of the contacts to be populated.
 # EFFECTS: Saves the contacts that are detectable by the program into a file.
-def saveContacts(output):
+def saveContacts(output, names, phoneNums, emailAddresses):
+	print('Calling saveContacts')
+
 	openedFile = open(output, 'w')
-	openedFile.write('lala')
+
+	for name in names:
+		openedFile.write(name)
+	
+	for number in phoneNums:
+		openedFile.write(number)
+
+	for emailAddr in emailAddresses:
+		openedFile.write(emailAddr)
+
+	openedFile.close()
 
 # Helper function.
 def phoneAndEmailHelper(sentence):
 	phoneNumber = phoneNumberHandler(sentence)
 	emailAddr = emailAddrHandler(sentence)
+	name = 'nothing' # TODO
 
 	if len(phoneNumber) != 0:
 		print(phoneNumber)
@@ -53,11 +71,9 @@ def phoneAndEmailHelper(sentence):
 		print(emailAddr)
 
 	# Handle output to contacts.txt
-	saveContacts(OUTPUTFILE)
+	saveContacts(OUTPUTFILE, name, phoneNumber, emailAddr)
 
 readFromFile = False
-NUMARGS = 2
-OUTPUTFILE = 'contacts.txt'
 
 # Handle command line arguments
 if len(sys.argv) < NUMARGS:
@@ -78,8 +94,8 @@ if readFromFile:
 	for sentence in fileContent:
 		phoneAndEmailHelper(sentence)
 
+	openedFile.close()
 # Handle clipboard
 else:
 	clipboardContent = pyperclip.paste()
 	phoneAndEmailHelper(clipboardContent)
-
