@@ -21,15 +21,20 @@ OUTPUTFILE = 'contacts.txt'
 
 # EFFECTS: Returns the phone numbers if present, None if phone number is absent.
 def phoneNumberHandler(text):
-	print(text)
-	phoneReg = re.compile(r'\d\d\d-\d\d\d-\d\d\d\d')
+	phoneReg = re.compile(r'''(
+		(\d{3}|\(\d{3}\)?)
+		(\s|-|\.)?
+		(\d{3})
+		(\s|-|\.)
+		(\d{4})
+		(\s*(ext|x|ext.)\s*(\d{2,5}))?
+		)''', re.I)
 	phoneNums = phoneReg.findall(text)
 	return phoneNums
 
 
 # EFFECTS: Returns the email addresses if present, None if absent.
 def emailAddrHandler(text):
-	print(text)
 	emailReg = re.compile(r'''(
 		[a-zA-Z0-9._%+-]+ # username 
 		@
@@ -50,7 +55,6 @@ def printContacts():
 # REQUIRES: The data structures of the contacts to be populated.
 # EFFECTS: Saves the contacts that are detectable by the program into a file.
 def saveContacts(output, names, phoneNums, emailAddresses):
-	print('Calling saveContacts')
 
 	openedFile = open(output, 'w')
 
